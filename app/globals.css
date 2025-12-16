@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: var(--font-vt323), monospace;
+    /* 禁用字体平滑以获得真正的像素效果 */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    text-rendering: optimizeSpeed;
+  }
+}
+
+@layer utilities {
+  .pixel-text-shadow {
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .pixel-shadow {
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .pixel-shadow-sm {
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .pixel-corners {
+    clip-path: polygon(
+      0 8px,
+      8px 0,
+      calc(100% - 8px) 0,
+      100% 8px,
+      100% calc(100% - 8px),
+      calc(100% - 8px) 100%,
+      8px 100%,
+      0 calc(100% - 8px)
+    );
+  }
+  
+  /* 确保像素字体渲染清晰 */
+  .font-press {
+    font-family: var(--font-press), cursive;
+    /* 禁用字体平滑以获得真正的像素效果 */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    text-rendering: optimizeSpeed;
+  }
+  
+  .font-vt323 {
+    font-family: var(--font-vt323), monospace;
+    /* 禁用字体平滑以获得真正的像素效果 */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    text-rendering: optimizeSpeed;
+  }
+}
+
