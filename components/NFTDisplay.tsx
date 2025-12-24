@@ -41,7 +41,7 @@ export function NFTDisplay({ className = "" }: NFTDisplayProps) {
               
               <div className="w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] relative bg-[#e5e5e5]">
                 <Image
-                  src="/nft-placeholder.png"
+                  src="/Christmas.png"
                   alt="X402X Mystery Box"
                   fill
                   priority
