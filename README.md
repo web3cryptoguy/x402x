@@ -77,7 +77,21 @@ yarn build
 
 ```env
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
+NEXT_PUBLIC_MORALIS_API_KEY=your_moralis_api_key
+NEXT_PUBLIC_MORALIS_BASE_URL=https://deep-index.moralis.io/api/v2.2
+NEXT_PUBLIC_MINT_START_TIME=2024-01-01 00:00:00
 ```
+
+### 环境变量说明
+
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: WalletConnect 项目 ID（可选）
+- `NEXT_PUBLIC_MORALIS_API_KEY`: Moralis API 密钥（用于获取钱包资产）
+- `NEXT_PUBLIC_MORALIS_BASE_URL`: Moralis API 基础 URL（可选，有默认值）
+- `NEXT_PUBLIC_MINT_START_TIME`: Mint 起始时间（北京时间），支持以下格式：
+  - `YYYY-MM-DD HH:mm:ss`（例如：`2024-01-01 00:00:00`）
+  - ISO 8601 格式（例如：`2024-01-01T00:00:00+08:00`）
+  
+  如果不设置此变量，将使用当前时间作为起始时间。
 
 ## 功能特性
 

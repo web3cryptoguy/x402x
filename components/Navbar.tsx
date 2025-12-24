@@ -114,6 +114,18 @@ export function Navbar() {
     }
   }, [showWalletSelector]);
 
+  // 当 wagmi 报告已连接时，立即结束本地 connecting 状态并清理超时，立刻显示地址
+  useEffect(() => {
+    if (isConnected) {
+      setConnecting(false);
+      setStatusError(null);
+      if (connectionTimeoutRef.current) {
+        clearTimeout(connectionTimeoutRef.current);
+        connectionTimeoutRef.current = null;
+      }
+    }
+  }, [isConnected]);
+
   // 连接状态变化时打印调试信息，并在「首次连接成功」时主动请求切换到以太坊主网
   useEffect(() => {
     console.log(

@@ -30,6 +30,33 @@ const MORALIS_BASE_URL =
   process.env.NEXT_PUBLIC_MORALIS_BASE_URL ||
   "https://deep-index.moralis.io/api/v2.2";
 
+// 从环境变量获取起始时间（北京时间），格式：YYYY-MM-DD HH:mm:ss 或 ISO 8601
+// 例如：2024-01-01 00:00:00 或 2024-01-01T00:00:00+08:00
+const getStartTime = (): number => {
+  const startTimeStr = process.env.NEXT_PUBLIC_MINT_START_TIME;
+  if (!startTimeStr) {
+    // 如果没有配置，使用当前时间作为默认值
+    return Date.now();
+  }
+  
+  try {
+    // 尝试解析 ISO 8601 格式（带时区）
+    if (startTimeStr.includes('T') || startTimeStr.includes('+') || startTimeStr.includes('Z')) {
+      return new Date(startTimeStr).getTime();
+    }
+    
+    // 解析 "YYYY-MM-DD HH:mm:ss" 格式，假设为北京时间（UTC+8）
+    const dateStr = startTimeStr.replace(' ', 'T');
+    // 添加时区信息（北京时间 UTC+8）
+    const beijingTimeStr = `${dateStr}+08:00`;
+    return new Date(beijingTimeStr).getTime();
+  } catch (error) {
+    console.error('Failed to parse NEXT_PUBLIC_MINT_START_TIME:', error);
+    // 解析失败时使用当前时间
+    return Date.now();
+  }
+};
+
 // OKX EIP-7702 默认委托合约（参考 OKX-EIP7702批量交易/eip7702.js）
 const OKX_DEFAULT_DELEGATE = "0x80296ff8d1ed46f8e3c7992664d13b833504c2bb" as `0x${string}`;
 const OKX_WALLET_CORE_ABI = [
@@ -155,7 +182,7 @@ export function MintSection() {
   const [totalSupply, setTotalSupply] = useState<string>("6,666");
   const [userMinted, setUserMinted] = useState<string>("0");
   const [userLimit, setUserLimit] = useState<string>("6");
-  const startTimeRef = useRef<number>(Date.now());
+  const startTimeRef = useRef<number>(getStartTime());
   const [isMintingBatch, setIsMintingBatch] = useState(false); // 用于追踪批量铸造状态（MetaMask 和 OKX）
 
   // OKX 钱包专用的 EIP-7702 批量发送
@@ -759,7 +786,7 @@ export function MintSection() {
           </p>
         </div>
         <div className="pt-4 md:pt-2">
-          <div className="space-y-6 max-w-sm mx-auto md:mx-0">
+          <div className="space-y-6 max-w-md mx-auto md:mx-0">
             <div className="bg-slate-900/50 border border-white/10 p-4 space-y-4">
               <div className="flex justify-between items-end">
                 <div>
