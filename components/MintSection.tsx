@@ -774,10 +774,10 @@ export function MintSection() {
             </div>
           </div>
           <h1 className="font-press text-3xl sm:text-4xl md:text-5xl text-white leading-tight pixel-text-shadow tracking-tight">
-            <span className="text-yellow-400">X402X DOG</span>
+            <span className="text-yellow-400">X402X BOX</span>
           </h1>
           <p className="text-gray-400 text-base sm:text-lg font-vt323 max-w-md mx-auto md:mx-0 leading-relaxed">
-            Mint unique 8-bit dogs on Ethereum. <br />
+            Mint unique 8-bit BOXs on Ethereum. <br />
             Powered by{" "}
             <span className="text-white border-b border-white/20">
               x402x Protocol

@@ -178,8 +178,8 @@ export function Navbar() {
                 connect({ 
                   connector: metaMask({
                     dappMetadata: {
-                      name: 'x402x Dog',
-                      url: 'https://x402x.dog',
+                      name: 'x402x BOX',
+                      url: 'https://x402x.vercel.app',
                     },
                   })
                 });
@@ -253,8 +253,8 @@ export function Navbar() {
           console.log('Using MetaMask connector');
           connectorToUse = metaMask({
             dappMetadata: {
-              name: 'x402x Dog',
-              url: 'https://x402x.dog',
+              name: 'x402x BOX',
+              url: 'https://x402x.vercel.app',
             },
           });
         } else if (id.includes('okx') || id.includes('okxwallet') || name.includes('okx')) {
@@ -397,7 +397,7 @@ export function Navbar() {
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 border-4 border-black pixel-shadow"></div>
         <span className="font-press text-white text-lg sm:text-xl pixel-text-shadow tracking-widest hidden sm:block">
-          x402x <span className="text-yellow-400">Dog</span>
+          x402x <span className="text-yellow-400">BOX</span>
         </span>
       </div>
       <div className="relative">
